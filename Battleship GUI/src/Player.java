@@ -5,12 +5,16 @@ import java.util.ArrayList;
 public class Player {
     private ArrayList<Boolean> shipList = new ArrayList<>();
     private int currentGuess;
+    private static int totalPlayers;
+    private int playerID;
     private final int MAX_CAPACITY = 100;
 
     public Player () {
         for (int i = 0; i < MAX_CAPACITY; i++) {
             shipList.add(false);
         }
+        totalPlayers++;
+        this.playerID = totalPlayers;
     }
 
     public void setShipNode (int index, boolean value) {
@@ -32,6 +36,11 @@ public class Player {
     public int getPlayerGuess() {
         return currentGuess;
     }
+
+    public int getPlayerID() {
+        return playerID;
+    }
+    
     /**
      * Method that checks if any ships or ship nodes remain
      * @return whether any ships / nodes remain

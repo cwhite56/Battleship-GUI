@@ -7,7 +7,7 @@ public class BattleshipThread implements Runnable{
     private PrintWriter out;
     private Socket clientSocket;
     private int playerNumber;
-    private ArrayList<Boolean> playerShipList;
+    private Player player;
     private BattleshipServer server;
     public static final String STOP_STRING = "##";
 
@@ -21,16 +21,14 @@ public class BattleshipThread implements Runnable{
     @Override
     public void run() {
         try {
-            playerNumber = server.setPlayerNumber();
             
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new PrintWriter(clientSocket.getOutputStream(), true);
 
             ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
 
-            playerShipList = (ArrayList<Boolean>)objectInputStream.readObject();
-
-            server.setPlayerShipList(playerNumber, playerShipList);
+            player = (Player)objectInputStream.readObject();
+            server.addPlayerShipList(player);
 
             readMessages();
 
@@ -45,7 +43,7 @@ public class BattleshipThread implements Runnable{
     private void readMessages() throws IOException{
         
         String message;
-        ArrayList<Boolean> opponentShipList = server.getPlayerShipList(playerNumber);
+        ArrayList<Boolean> opponentShipList = server.getOpponentShipList(player);
         
         while(!(message = in.readLine()).equals(STOP_STRING)) {
             

@@ -33,7 +33,7 @@ public class BattleshipClient {
 	out = new PrintWriter(socket.getOutputStream(), true);
 	in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream()); 
-	objectOutputStream.writeObject(player.getShipList());
+	objectOutputStream.writeObject(player);
 	}
 	/**
 	 * Method to send a player guess through the TCP connection
