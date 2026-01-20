@@ -6,12 +6,13 @@ public class BattleshipThread implements Runnable{
     private BufferedReader in;
     private PrintWriter out;
     private Socket clientSocket;
-    private int playerNumber;
+    private int playerID;
     private Player player;
     private BattleshipServer server;
     public static final String STOP_STRING = "##";
 
-    public BattleshipThread(Socket clientSocket, BattleshipServer server) {
+    public BattleshipThread(Socket clientSocket, int playerID, BattleshipServer server) {
+        this.playerID = playerID;
         this.clientSocket = clientSocket;
         this.server = server;
     }
@@ -28,7 +29,7 @@ public class BattleshipThread implements Runnable{
             ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
 
             player = (Player)objectInputStream.readObject();
-            server.addPlayerShipList(player);
+            server.addPlayerShipList(player, this);
 
             readMessages();
 
@@ -43,7 +44,7 @@ public class BattleshipThread implements Runnable{
     private void readMessages() throws IOException{
         
         String message;
-        ArrayList<Boolean> opponentShipList = server.getOpponentShipList(player);
+        ArrayList<Boolean> opponentShipList = server.getOpponentShipList(this);
         
         while(!(message = in.readLine()).equals(STOP_STRING)) {
             
@@ -55,6 +56,10 @@ public class BattleshipThread implements Runnable{
             }   
         }
         closeThreadStreams();
+    }
+
+    public int getPlayerID() {
+        return playerID;
     }
     /**
      * Method that closes all streams

@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class BattleshipGUI {
     
     private static final String[] LETTER_AXIS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-    private ImageIcon shipSquare = ImageScaler.scaleImage("BattleShip\\Battleship GUI\\square.png");
-    private ImageIcon hitCircle = ImageScaler.scaleImage("BattleShip\\Battleship GUI\\circle.png");
-    private ImageIcon missX = ImageScaler.scaleImage("BattleShip\\Battleship GUI\\x.png");
+    private ImageIcon shipSquare = ImageScaler.scaleImage("Battleship GUI\\square.png");
+    private ImageIcon hitCircle = ImageScaler.scaleImage("Battleship GUI\\circle.png");
+    private ImageIcon missX = ImageScaler.scaleImage("Battleship GUI\\x.png");
     private static boolean localSelected = false;
     private static boolean placementFinished = false;
     private ArrayList<CustomJButton> guessButtonList;

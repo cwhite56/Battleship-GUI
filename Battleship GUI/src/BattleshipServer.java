@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class BattleshipServer {
     public static final String STOP_STRING = "##";
+    private static int totalPlayers;
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private volatile ArrayList<ArrayList<Boolean>> bothPlayerShipLists = new ArrayList<>();
@@ -24,7 +25,8 @@ public class BattleshipServer {
 
         while (true) {
         clientSocket = serverSocket.accept();
-        BattleshipThread battleshipThread = new BattleshipThread(clientSocket, this);
+        totalPlayers++;
+        BattleshipThread battleshipThread = new BattleshipThread(clientSocket, totalPlayers, this);
         Thread thread = new Thread(battleshipThread);
         thread.start();
         }
@@ -34,18 +36,17 @@ public class BattleshipServer {
      * @param playerNumber of calling thread
      * @return opposing player's ship list
      */
-    public ArrayList<Boolean> getOpponentShipList(Player player) {
+    public ArrayList<Boolean> getOpponentShipList(BattleshipThread thread) {
 
-        while(bothPlayerShipLists.size() < 2) {
-
-        }
-
-        if (player.getPlayerID() == 1) {
+        if (thread.getPlayerID() == 1) {
             
+            while(bothPlayerShipLists.size() < 2) {
+            }
+
             return bothPlayerShipLists.get(1);
         } 
 
-        else if (player.getPlayerID() == 2) {
+        else if (thread.getPlayerID() == 2) {
             return bothPlayerShipLists.get(0);
         }
 
@@ -54,8 +55,7 @@ public class BattleshipServer {
         }
     }
 
-    public void addPlayerShipList(Player player) {
-        bothPlayerShipLists.add(player.getPlayerID(), player.getShipList());
-    }
-    
+    public void addPlayerShipList(Player player, BattleshipThread thread) {
+        bothPlayerShipLists.add(thread.getPlayerID() - 1, player.getShipList());
+    }   
 }
