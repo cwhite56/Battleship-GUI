@@ -6,11 +6,12 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/** Class that represents the Battleship GUI
+/**
+ * Class that represents the Battleship GUI
  */
 public class BattleshipGUI {
-    
-    private static final String[] LETTER_AXIS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+
+    private static final String[] LETTER_AXIS = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
     private ImageIcon shipSquare = ImageScaler.scaleImage("Battleship GUI\\square.png");
     private ImageIcon hitCircle = ImageScaler.scaleImage("Battleship GUI\\circle.png");
     private ImageIcon missX = ImageScaler.scaleImage("Battleship GUI\\x.png");
@@ -25,9 +26,11 @@ public class BattleshipGUI {
         this.player = player;
         this.client = client;
         initJFrame();
-        
+
     }
-    /** Method to initialize all JComponents
+
+    /**
+     * Method to initialize all JComponents
      * 
      */
     public void initJFrame() {
@@ -41,7 +44,7 @@ public class BattleshipGUI {
         JPanel guessPanel = new JPanel();
         guessPanel.setLayout(new BorderLayout());
         frame.getContentPane().add(guessPanel);
-    
+
         guessButtonList = createButtonGrid(guessPanel, new GuessButtonListener());
         guessPanel.add(createLetterAxis(), BorderLayout.WEST);
         guessPanel.add(createNumberAxis(), BorderLayout.SOUTH);
@@ -77,8 +80,10 @@ public class BattleshipGUI {
         placeArea.add(placeButton);
         frame.setVisible(true);
     }
+
     /**
      * Helper method to create the letter axis panel
+     * 
      * @return letter axis panel
      */
     public static JPanel createLetterAxis() {
@@ -86,7 +91,8 @@ public class BattleshipGUI {
         letterAxisPanel.setLayout(new BoxLayout(letterAxisPanel, BoxLayout.Y_AXIS));
         letterAxisPanel.setBackground(Color.LIGHT_GRAY);
 
-        CompoundBorder letterAxisBorder = new CompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 1), BorderFactory.createEmptyBorder(12, 10, 12, 10));
+        CompoundBorder letterAxisBorder = new CompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 1),
+                BorderFactory.createEmptyBorder(12, 10, 12, 10));
 
         for (int i = 0; i < LETTER_AXIS.length; i++) {
             JLabel label = new JLabel(LETTER_AXIS[i]);
@@ -95,8 +101,10 @@ public class BattleshipGUI {
         }
         return letterAxisPanel;
     }
+
     /**
      * Helper method to create the number axis panel
+     * 
      * @return number axis panel
      */
     public static JPanel createNumberAxis() {
@@ -104,7 +112,8 @@ public class BattleshipGUI {
         numberAxisPanel.setLayout(new BoxLayout(numberAxisPanel, BoxLayout.X_AXIS));
         numberAxisPanel.setBackground(Color.LIGHT_GRAY);
 
-        CompoundBorder numberAxisBorder = new CompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 1), BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        CompoundBorder numberAxisBorder = new CompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 1),
+                BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
         JLabel empty = new JLabel();
         empty.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
@@ -118,8 +127,10 @@ public class BattleshipGUI {
         }
         return numberAxisPanel;
     }
+
     /**
      * Helper method to create button grid panel
+     * 
      * @return button grid panel
      */
     public static ArrayList<CustomJButton> createButtonGrid(JPanel destination, ActionListener al) {
@@ -142,69 +153,78 @@ public class BattleshipGUI {
     public ArrayList<CustomJButton> getGuessButtonList() {
         return guessButtonList;
     }
+
     /**
      * Action Listener that sends player guess to the server through the client
      */
     class SubmitButtonListener implements ActionListener {
-            /**
-             * Method that takes the index of the selected guess button and sends it through the playerGuess method
-             */
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        /**
+         * Method that takes the index of the selected guess button and sends it through
+         * the playerGuess method
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
-                for (int i = 0; i < guessButtonList.size(); i++) {
+            for (int i = 0; i < guessButtonList.size(); i++) {
 
-                    if (guessButtonList.get(i).getSelected()) {
+                if (guessButtonList.get(i).getSelected()) {
 
-                        guessButtonList.get(i).setBackground(new JButton().getBackground());
-                        guessButtonList.get(i).setSelected(false);
-                        
-                        boolean result = playerGuess(i);
+                    guessButtonList.get(i).setBackground(new JButton().getBackground());
+                    guessButtonList.get(i).setSelected(false);
 
-                        setButtonIcon(i, result);
+                    boolean result = playerGuess(i);
 
-                        break;
-                    }
-                }
-
-                localSelected = false;
-
-                if (!player.shipsLeft()) {
-                    client.finishGame();
+                    setButtonIcon(i, result);
+                    break;
                 }
             }
-            /**
-             * Method that sets the player guess and sends it as an index through the client to the server
-             * @return whether the guess was a hit / miss
-             */
-            private boolean playerGuess(int index) {
-                player.setPlayerGuess(index);
-                
-                try {
-                    return client.sendData();
 
-                } catch (IOException io) {
-                    return false;
-                }
+            localSelected = false;
+
+            if (!player.shipsLeft()) {
+                client.finishGame();
             }
-            /**
-             * Method that sets the guess button to the approrpiate icon whether a hit / miss occurred 
-             * @param index of the button guessed relative to the player's list of possible locations
-             * @param result of whether a hit / miss
-             */
-            private void setButtonIcon (int index, boolean result) {
+        }
 
-                if (result) {
-                    guessButtonList.get(index).setIcon(hitCircle);
-                    player.setShipNode(index, false);
-                }
+        /**
+         * Method that sets the player guess and sends it as an index through the client
+         * to the server
+         * 
+         * @return whether the guess was a hit / miss
+         */
+        private boolean playerGuess(int index) {
+            player.setPlayerGuess(index);
 
-                else {
-                    guessButtonList.get(index).setIcon(missX);
-                }
+            try {
+                return client.sendData();
+
+            } catch (IOException io) {
+                return false;
             }
+        }
+
+        /**
+         * Method that sets the guess button to the approrpiate icon whether a hit /
+         * miss occurred
+         * 
+         * @param index  of the button guessed relative to the player's list of possible
+         *               locations
+         * @param result of whether a hit / miss
+         */
+        private void setButtonIcon(int index, boolean result) {
+
+            if (result) {
+                guessButtonList.get(index).setIcon(hitCircle);
+                player.setShipNode(index, false);
+            }
+
+            else {
+                guessButtonList.get(index).setIcon(missX);
+            }
+        }
 
     }
+
     /**
      * Action Listener that cancels current player guess
      */
@@ -219,6 +239,7 @@ public class BattleshipGUI {
             localSelected = false;
         }
     }
+
     /**
      * Action Listener that locks in player's ship placement for the game
      */
@@ -226,13 +247,13 @@ public class BattleshipGUI {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            for (int i = 0; i < placementButtonList.size(); i ++) {
+            for (int i = 0; i < placementButtonList.size(); i++) {
 
                 if (placementButtonList.get(i).getSelected()) {
                     player.setShipNode(i, true);
                 }
             }
-            
+
             if (!placementFinished) {
                 try {
                     client.setupNetworking();
@@ -240,30 +261,32 @@ public class BattleshipGUI {
                 } catch (IOException io) {
                     System.out.println("Networking failed");
                 }
-            }   
+            }
             placementFinished = true;
-        } 
+        }
     }
+
     /**
      * Action Listener that allows player to place thier ships on the board
      */
     class PlaceButtonGridListener implements ActionListener {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                if (placementFinished) {
-                    return;
-                }
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
-                CustomJButton source = (CustomJButton) e.getSource();
-
-                if (!source.getSelected()) {
-                    source.setSelected(true);
-                    source.setIcon(shipSquare);
-                }    
+            if (placementFinished) {
+                return;
             }
+
+            CustomJButton source = (CustomJButton) e.getSource();
+
+            if (!source.getSelected()) {
+                source.setSelected(true);
+                source.setIcon(shipSquare);
+            }
+        }
     }
+
     /**
      * Action Listener that selects a location to be guessed
      */
@@ -284,5 +307,5 @@ public class BattleshipGUI {
                 localSelected = true;
             }
         }
-    }   
+    }
 }

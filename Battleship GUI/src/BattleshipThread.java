@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class BattleshipThread implements Runnable{
     private BufferedReader in;
     private PrintWriter out;
+    private ObjectInputStream objectInputStream;
     private Socket clientSocket;
     private int playerID;
     private Player player;
@@ -26,7 +27,7 @@ public class BattleshipThread implements Runnable{
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
+            objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
 
             player = (Player)objectInputStream.readObject();
             server.addPlayerShipList(player, this);
@@ -53,7 +54,7 @@ public class BattleshipThread implements Runnable{
             }
             else if (!opponentShipList.get(Integer.parseInt(message))) {
                 out.println("false");
-            }   
+            }
         }
         closeThreadStreams();
     }

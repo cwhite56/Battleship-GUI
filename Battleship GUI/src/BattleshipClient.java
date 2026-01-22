@@ -42,7 +42,9 @@ public class BattleshipClient {
 	 */
 	public boolean sendData() throws IOException{
 		out.println(player.getPlayerGuess());
-		return Boolean.parseBoolean(in.readLine());
+		boolean result = Boolean.parseBoolean(in.readLine());
+
+		return result;
 	}
 	/**
 	 * Method that signals a player has lost all of their ships to the server
