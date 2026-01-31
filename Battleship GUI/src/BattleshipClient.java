@@ -45,10 +45,14 @@ public class BattleshipClient {
 	 */
 	public boolean sendData() throws IOException{
 		out.println(player.getPlayerGuess());
-		boolean result = Boolean.parseBoolean(in.readLine());
+		String result = in.readLine();
 
-		//finishGame();
-		return result;
+		if (result.equalsIgnoreCase("true and win")) {
+			finishGame();
+			return true;
+		}
+
+		return Boolean.parseBoolean(result);
 	}
 	/**
 	 * Method that signals a player has lost all of their ships to the server

@@ -6,7 +6,6 @@ public class BattleshipThread implements Runnable{
     private BufferedReader in;
     private PrintWriter out;
     private ObjectInputStream objectInputStream;
-    private ObjectOutputStream objectOutputStream;
     private Socket clientSocket;
     private int playerID;
     private Player player;
@@ -29,7 +28,6 @@ public class BattleshipThread implements Runnable{
             out = new PrintWriter(clientSocket.getOutputStream(), true);
 
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
-            objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 
             player = (Player)objectInputStream.readObject();
             server.addPlayerShipList(player, this);
@@ -48,18 +46,21 @@ public class BattleshipThread implements Runnable{
         
         String message;
         ArrayList<Boolean> opponentShipList = server.getOpponentShipList(this);
-        
         while(!(message = in.readLine()).equals(STOP_STRING)) {
             
             if (opponentShipList.get(Integer.parseInt(message)) && shipsRemaining(opponentShipList)) {
-                out.println("true");
                 opponentShipList.set(Integer.parseInt(message), false);
+
+                if (!shipsRemaining(opponentShipList)) {
+                    out.println("true and win");
+                }
+                else {
+                    out.println("true");
+                }
             }
+
             else if (!opponentShipList.get(Integer.parseInt(message)) && shipsRemaining(opponentShipList)) {
                 out.println("false");
-            }
-            else {
-                out.println("You win");
             }
         }
         closeThreadStreams();
