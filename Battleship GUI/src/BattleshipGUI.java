@@ -178,12 +178,7 @@ public class BattleshipGUI {
                     break;
                 }
             }
-
             localSelected = false;
-
-            if (!player.shipsLeft()) {
-                client.finishGame();
-            }
         }
 
         /**

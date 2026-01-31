@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 /**
  * Class that represents the Battleship client that interacts with the server
  */
@@ -7,6 +8,7 @@ public class BattleshipClient {
 	private Socket socket;
 	private PrintWriter out;
 	private BufferedReader in;
+	private ObjectOutputStream objectOutputStream;
 	private Player player;
 	private BattleshipGUI gui;
 	private static volatile boolean gameFinished = false;
@@ -32,18 +34,20 @@ public class BattleshipClient {
 	socket = new Socket("localhost", 5000);
 	out = new PrintWriter(socket.getOutputStream(), true);
 	in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream()); 
+	objectOutputStream = new ObjectOutputStream(socket.getOutputStream()); 
 	objectOutputStream.writeObject(player);
 	}
 	/**
 	 * Method to send a player guess through the TCP connection
 	 * @return whether that guess was a miss / hit
 	 * @throws IOException
+	 * @throws ClassNotFoundException 
 	 */
 	public boolean sendData() throws IOException{
 		out.println(player.getPlayerGuess());
 		boolean result = Boolean.parseBoolean(in.readLine());
 
+		//finishGame();
 		return result;
 	}
 	/**
