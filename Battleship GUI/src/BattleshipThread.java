@@ -46,11 +46,17 @@ public class BattleshipThread implements Runnable{
         
         String message;
         ArrayList<Boolean> opponentShipList = server.getOpponentShipList(this);
+
         while(!(message = in.readLine()).equals(STOP_STRING)) {
             
+            // Wait for your turn
+            while(!(server.isItMyTurn() == this.getPlayerID())) {
+
+            }
+
             if (opponentShipList.get(Integer.parseInt(message)) && shipsRemaining(opponentShipList)) {
                 opponentShipList.set(Integer.parseInt(message), false);
-
+                // if player guess is a hit AND it is the game winning move
                 if (!shipsRemaining(opponentShipList)) {
                     out.println("true and win");
                 }

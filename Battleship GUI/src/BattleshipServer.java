@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class BattleshipServer {
     public static final String STOP_STRING = "##";
     private static int totalPlayers;
+    private static volatile int whoseTurnIsIt = 1;
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private volatile ArrayList<ArrayList<Boolean>> bothPlayerShipLists = new ArrayList<>();
@@ -39,7 +40,7 @@ public class BattleshipServer {
     public ArrayList<Boolean> getOpponentShipList(BattleshipThread thread) {
 
         if (thread.getPlayerID() == 1) {
-            
+            // Wait for both lists to get initialized
             while(bothPlayerShipLists.size() < 2) {
             }
 
@@ -57,5 +58,17 @@ public class BattleshipServer {
 
     public void addPlayerShipList(Player player, BattleshipThread thread) {
         bothPlayerShipLists.add(thread.getPlayerID() - 1, player.getShipList());
-    }   
+    }
+    
+    public int isItMyTurn() {
+        int temp = whoseTurnIsIt;
+
+        if (temp == 1) {
+            whoseTurnIsIt = 2;
+        }
+        else {
+            whoseTurnIsIt = 1;
+        }
+        return temp;
+    }
 }
