@@ -60,15 +60,16 @@ public class BattleshipServer {
         bothPlayerShipLists.add(thread.getPlayerID() - 1, player.getShipList());
     }
     
-    public int isItMyTurn() {
-        int temp = whoseTurnIsIt;
-
-        if (temp == 1) {
+    public boolean isItMyTurn(int playerID) {
+        
+        if (whoseTurnIsIt == 1 && playerID == 1) {
             whoseTurnIsIt = 2;
+            return true;
         }
-        else {
+        else if (whoseTurnIsIt == 2 && playerID == 2){
             whoseTurnIsIt = 1;
+            return true;
         }
-        return temp;
+        return false;
     }
 }

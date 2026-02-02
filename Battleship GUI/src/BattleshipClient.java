@@ -18,7 +18,7 @@ public class BattleshipClient {
 		gui = new BattleshipGUI(player, this);
 		
 	}
-// left to do: user error handling, stop string / endgame bug and turn order
+// left to do: Minor bug fixes // visual track of turn order
 	public static void main(String[] args) throws IOException {
 		BattleshipClient client = new BattleshipClient();
 		while (!gameFinished) {

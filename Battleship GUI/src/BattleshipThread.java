@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.nio.channels.Pipe.SourceChannel;
 import java.util.ArrayList;
 
 public class BattleshipThread implements Runnable{
@@ -48,12 +49,11 @@ public class BattleshipThread implements Runnable{
         ArrayList<Boolean> opponentShipList = server.getOpponentShipList(this);
 
         while(!(message = in.readLine()).equals(STOP_STRING)) {
-            
             // Wait for your turn
-            while(!(server.isItMyTurn() == this.getPlayerID())) {
-
+            while(!server.isItMyTurn(this.getPlayerID())) {
+                //System.out.println("Server says: " + server.isItMyTurn() + ". thread says: " + this.getPlayerID());
+                
             }
-
             if (opponentShipList.get(Integer.parseInt(message)) && shipsRemaining(opponentShipList)) {
                 opponentShipList.set(Integer.parseInt(message), false);
                 // if player guess is a hit AND it is the game winning move
