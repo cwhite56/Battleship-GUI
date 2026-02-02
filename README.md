@@ -8,5 +8,6 @@ The purpose of this project is to strengthen OOP and DSA principles. It also req
 The BattleshipServer class's main method must be ran first. Two instances of the BattleshipClient class's main method must be ran to connect to the server. Before starting, each player must plot their respective fleet of ships on the right grid and click place. From there, the game is played just as the classic Battleship board game by making a guess and submitting it.
 ### Status
 This project is functional but a few features are still in progress:
-- Turn order enforcement
-- Game completed end processes
+- Minor visual bug fixes
+- Better button deselection
+- Visual turn order tracker
