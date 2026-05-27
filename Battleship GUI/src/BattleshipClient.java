@@ -30,7 +30,8 @@ public class BattleshipClient {
 	 * @throws IOException
 	 */
 	public void setupNetworking() throws IOException{
-	socket = new Socket("localhost", 5000);
+	InetAddress localHost = InetAddress.getLocalHost();
+	socket = new Socket(localHost, 5000);
 	out = new PrintWriter(socket.getOutputStream(), true);
 	in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	objectOutputStream = new ObjectOutputStream(socket.getOutputStream()); 
