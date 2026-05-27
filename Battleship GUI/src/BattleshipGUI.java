@@ -12,15 +12,15 @@ import java.util.ArrayList;
 public class BattleshipGUI {
 
     private static final String[] LETTER_AXIS = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-    private ImageIcon shipSquare = ImageScaler.scaleImage("Battleship GUI\\square.png");
-    private ImageIcon hitCircle = ImageScaler.scaleImage("Battleship GUI\\circle.png");
-    private ImageIcon missX = ImageScaler.scaleImage("Battleship GUI\\x.png");
+    private ImageIcon shipSquare = ImageScaler.scaleImage("square.png");
+    private ImageIcon hitCircle = ImageScaler.scaleImage("circle.png");
+    private ImageIcon missX = ImageScaler.scaleImage("x.png");
     private static boolean localSelected = false;
     private static boolean placementFinished = false;
     private ArrayList<CustomJButton> guessButtonList;
     private ArrayList<CustomJButton> placementButtonList;
     private Player player;
-    private BattleshipClient client;
+    private BattleshipClient client; 
 
     public BattleshipGUI(Player player, BattleshipClient client) {
         this.player = player;
@@ -248,7 +248,6 @@ public class BattleshipGUI {
                     player.setShipNode(i, true);
                 }
             }
-
             if (!placementFinished) {
                 try {
                     client.setupNetworking();
@@ -272,8 +271,8 @@ public class BattleshipGUI {
             if (placementFinished) {
                 return;
             }
-
             CustomJButton source = (CustomJButton) e.getSource();
+        
 
             if (!source.getSelected()) {
                 source.setSelected(true);
